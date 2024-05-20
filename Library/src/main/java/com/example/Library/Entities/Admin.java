@@ -2,6 +2,7 @@ package com.example.Library.Entities;
 
 import java.util.*;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -24,5 +25,6 @@ public class Admin {
 
     @OneToOne
     @JoinColumn(referencedColumnName = "id", name = "admin_id")
+    @JsonIgnoreProperties({"password", "student", "authorities","admin"})
     User user;
 }

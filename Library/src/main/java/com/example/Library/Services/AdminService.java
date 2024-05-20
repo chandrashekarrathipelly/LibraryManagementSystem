@@ -3,6 +3,7 @@ package com.example.Library.Services;
 import java.util.List;
 import java.util.Optional;
 
+import com.example.Library.Entities.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.stereotype.Service;
@@ -31,8 +32,8 @@ public class AdminService {
     @Autowired 
     TransactionsRepository transactionsRepository;
 
-    public Admin addAdmin(AdminDTO adminDTO){
-        Admin admin= adminDTO.convertToAdmin();
+    public Admin addAdmin(AdminDTO adminDTO, User user){
+        Admin admin= adminDTO.convertToAdmin(user);
         return adminRepository.save(admin);
     }
 
@@ -72,9 +73,6 @@ public class AdminService {
         Optional<Admin> admin=adminRepository.findById(id);
         if(admin.isPresent()){
             Admin admin2=admin.get();
-            if(adminDTO.getEmail()!=null){
-                admin2.setEmail((adminDTO.getEmail()));
-            }
             if(adminDTO.getName()!=null){
                 admin2.setName(adminDTO.getName());
             }

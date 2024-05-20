@@ -4,6 +4,7 @@ import com.example.Library.Entities.User;
 import com.example.Library.Services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -27,6 +28,11 @@ public class UserController {
 //        return
         userService.saveUser(user);
 
+    }
+
+    @GetMapping("/")
+    public String successfull(){
+        return "Login successful";
     }
 
 }

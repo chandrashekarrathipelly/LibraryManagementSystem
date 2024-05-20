@@ -1,5 +1,7 @@
 package com.example.Library.Controllers;
 
+import com.example.Library.Entities.User;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import com.example.Library.DTO.StudentDTO;
@@ -15,9 +17,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 public class StudentController {
     @Autowired
     StudentService studentService;
+
     @PostMapping()
     public Student saveStudentDetails(@RequestBody StudentDTO studentDTO) {
-        return studentService.addStudent(studentDTO);
+        User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        System.out.println(user);
+        return studentService.addStudent(studentDTO, user);
     }
 
     @GetMapping("/{id}")

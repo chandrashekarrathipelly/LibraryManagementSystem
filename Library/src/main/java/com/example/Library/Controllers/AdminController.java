@@ -3,7 +3,9 @@ package com.example.Library.Controllers;
 import java.util.List;
 import java.util.Optional;
 
+import com.example.Library.Entities.User;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.Library.DTO.AdminDTO;
@@ -21,15 +23,15 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 
 
-@RestController
-
+@RestController()
 public class AdminController {
     @Autowired
     AdminService adminService;
 
     @PostMapping("/admin")
     public Admin addAdmin(@RequestBody AdminDTO asAdminDTO){
-       return adminService.addAdmin(asAdminDTO);
+        User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+       return adminService.addAdmin(asAdminDTO,user);
     }
 
     @PutMapping("/admin/update/{id}")

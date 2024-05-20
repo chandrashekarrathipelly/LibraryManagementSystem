@@ -1,6 +1,7 @@
 package com.example.Library.DTO;
 
 import com.example.Library.Entities.Admin;
+import com.example.Library.Entities.User;
 import lombok.*;
 
 @Setter
@@ -11,11 +12,11 @@ import lombok.*;
 
 public class AdminDTO {
     String name;
-    String email;
 
-    public Admin convertToAdmin(){
+    public Admin convertToAdmin(User user){
         Admin admin=new Admin();
-        admin.setEmail(this.email);
+        admin.setEmail(user.getUsername());
+        admin.setUser(user);
         admin.setName(this.name);
         return admin;
     }

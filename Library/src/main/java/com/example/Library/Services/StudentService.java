@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Optional;
 
 import com.example.Library.Entities.Request;
+import com.example.Library.Entities.User;
 import com.example.Library.Enum.Request_status;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatusCode;
@@ -20,8 +21,8 @@ public class StudentService {
   @Autowired
   StudentRepository studentrepository;
 
-  public Student addStudent(StudentDTO studentDTO) {
-    Student student = studentDTO.convertToStudent(studentDTO);
+  public Student addStudent(StudentDTO studentDTO, User user) {
+    Student student = studentDTO.convertToStudent(user);
     return this.studentrepository.save(student);
   }
 
@@ -41,9 +42,7 @@ public class StudentService {
       if (studentDTO.getContact() != null) {
         student2.setContact(studentDTO.getContact());
       }
-      if (studentDTO.getEmail() != null) {
-        student2.setEmail(studentDTO.getEmail());
-      }
+
       if (studentDTO.getName() != null) {
         student2.setName(studentDTO.getName());
       }
