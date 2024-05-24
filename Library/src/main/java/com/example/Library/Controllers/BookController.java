@@ -26,7 +26,7 @@ public class BookController {
 
     @PostMapping("/book")
     public Book postMethodName(@RequestBody BookDTO bookdto) {
-       return bookService.savebook(bookdto);
+       return bookService.saveBookDtoInfo(bookdto);
     }
     
     @GetMapping("/book/{id}")
@@ -42,7 +42,8 @@ public class BookController {
 
     @PutMapping("/book/update/{id}")
     public Book putMethodName(@PathVariable long id, @RequestBody BookDTO bookDTO) {
-        return bookService.updateBook(id,bookDTO);
+        return bookService.updateBook
+                (id,bookDTO);
     }
     
     @DeleteMapping("/book/delete/{id}")
@@ -55,26 +56,26 @@ public class BookController {
 
         System.out.println(type);
         System.out.println(value);
-        if(type.equals("id")){
-            ArrayList<Book> book=new ArrayList<>();
-              Book book2= this.bookService.getBook(Long.valueOf(value));
-              book.add(book2);
-             return book;
-        }
-        else if(type.equals("author")){
-            return this.bookService.getBookDetailsByAuthorName(value);
-        }
-        else if(type.equals("name")){
-           return this.bookService.getBookDetailsByBookName(value);
-        }
-        else if(type.equals("publication")){
-           return this.bookService.getBookByPublcation(value);
-    }else if(type.equals("genre")){
-        return this.bookService.getBookByGenre(value);
-    }
-        
-        else{
-            throw new ResponseStatusException(HttpStatusCode.valueOf(404),"Invalid type");
+        switch (type) {
+            case "id" -> {
+                ArrayList<Book> book = new ArrayList<>();
+                Book book2 = this.bookService.getBook(Long.valueOf(value));
+                book.add(book2);
+                return book;
+            }
+            case "author" -> {
+                return this.bookService.getBookDetailsByAuthorName(value);
+            }
+            case "name" -> {
+                return this.bookService.getBookDetailsByBookName(value);
+            }
+            case "publication" -> {
+                return this.bookService.getBookByPublcation(value);
+            }
+            case "genre" -> {
+                return this.bookService.getBookByGenre(value);
+            }
+            default -> throw new ResponseStatusException(HttpStatusCode.valueOf(404), "Invalid type");
         }
         
     }

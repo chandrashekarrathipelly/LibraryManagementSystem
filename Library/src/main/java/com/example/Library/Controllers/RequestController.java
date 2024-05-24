@@ -1,9 +1,11 @@
 package com.example.Library.Controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.RestController;
 import com.example.Library.DTO.RequestDTO;
 import com.example.Library.Entities.Request;
+import com.example.Library.Entities.User;
 import com.example.Library.Services.RequestService;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -18,7 +20,8 @@ public class RequestController {
 
     @PostMapping("/request")
     public Request postMethodName(@RequestBody RequestDTO requestDTO) {
-        return requestService.createRequest(requestDTO);
+        User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        return requestService.createRequest(requestDTO, user);
     }
 
     @DeleteMapping("/request/{id}")

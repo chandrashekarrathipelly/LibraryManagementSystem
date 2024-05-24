@@ -25,12 +25,16 @@ public class BookService {
         }
     }
 
-    public Book getBook(long id){
+    public Book getBook(long id) {
         try {
             return bookRepository.findById(id).get();
         } catch (Exception e) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "book is not present");
         }
+    }
+
+    public List<Book> getAllBooksById(long[] ids) {
+        return null;
     }
 
     public List<Book> getBookDetailsByAuthorName(String author) {
@@ -41,7 +45,7 @@ public class BookService {
         return bookRepository.findByName(name);
     }
 
-    public Book savebook(BookDTO bookdto) {
+    public Book saveBookDtoInfo(BookDTO bookdto) {
         Book book = bookdto.convertToBook(bookdto);
         return bookRepository.save(book);
     }
@@ -81,6 +85,10 @@ public class BookService {
 
     public List<Book> getBookByGenre(String value) {
         return bookRepository.findByGenre(value);
+    }
+
+    public void savebook(Book book) {
+        bookRepository.save(book);
     }
 
 }

@@ -14,20 +14,22 @@ import java.util.List;
 @RestController
 public class TransactionController {
 
-    @Autowired
-    StudentService studentService;
+  @Autowired
+  StudentService studentService;
 
-    @Autowired
-    TransactionService transactionService;
-    // student id transactions
-    // pending requests of Admin by adminId
-    // pending requests of student by studentId
-    @GetMapping("/student/pending/{id}")
-    public List<Request> getPendingRequests(@PathVariable long id){
-      return studentService.getPendingRequestByStudentId(id);
-    }
-    @GetMapping("/admin/pending/{id}")
-    public List<Request> getPendingRequestsByAdminId(@PathVariable long id){
-       return transactionService.getPendingRequestByAdminId(id);
-    }
+  @Autowired
+  TransactionService transactionService;
+
+  // student id transactions
+  // pending requests of Admin by adminId
+  // pending requests of student by studentId
+  @GetMapping("/student/pending/{id}")
+  public List<Request> getPendingRequests(@PathVariable long id) {
+    return studentService.getPendingRequestByStudentId(id);
+  }
+
+  @GetMapping("/admin/pending/{id}")
+  public List<Request> getPendingRequestsByAdminId(@PathVariable long id) {
+    return transactionService.getPendingRequestByAdminId(id);
+  }
 }

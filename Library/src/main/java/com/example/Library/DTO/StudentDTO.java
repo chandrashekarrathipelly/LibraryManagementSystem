@@ -1,4 +1,5 @@
 package com.example.Library.DTO;
+
 import com.example.Library.Entities.Student;
 import com.example.Library.Entities.User;
 import com.example.Library.Enum.StudentStatus;
@@ -17,8 +18,8 @@ public class StudentDTO {
     String contact;
     StudentStatus status;
 
-    public Student convertToStudent( User user){
-        Student student =new Student();
+    public Student convertToStudent(User user) {
+        Student student = new Student();
         student.setName(this.getName());
         student.setBranch(this.getBranch());
         student.setContact(this.getContact());

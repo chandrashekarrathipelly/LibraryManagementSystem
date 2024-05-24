@@ -2,7 +2,6 @@ package com.example.Library.Services;
 
 import java.util.Date;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatusCode;
@@ -14,6 +13,9 @@ import com.example.Library.Entities.Admin;
 import com.example.Library.Entities.Book;
 import com.example.Library.Entities.Request;
 import com.example.Library.Entities.Student;
+import com.example.Library.Entities.User;
+import com.example.Library.Enum.BookStatus;
+import com.example.Library.Enum.RequestType;
 import com.example.Library.Enum.Request_status;
 import com.example.Library.Repository.RequestRepository;
 
@@ -28,22 +30,25 @@ public class RequestService {
     @Autowired
     private RequestRepository requestRepository;
 
-    public Request createRequest(RequestDTO requestDTO) {
-        if (requestDTO.getBook_id_List().isEmpty() || requestDTO.getBook_id_List().size() > 3) {
-            throw new ResponseStatusException(HttpStatusCode.valueOf(404), "In valid Book Count");
+    public Request createRequest(RequestDTO requestDTO, User user) {
+        Student student = studentService.getStudentDetailsById(user.getStudent().getStudent_id());
+
+        Book book = bookService.getBook(requestDTO.getBook_id());
+
+        if (requestDTO.getRequestType() == RequestType.ISSUE) {
+            if (book.getStatus() != BookStatus.AVAILABLE) {
+                throw new ResponseStatusException(
+                        HttpStatusCode.valueOf(404),
+                        "book is Unavailable");
+            }
+        } else {
+            if (book.getStatus() != BookStatus.NOT_AVAILABLE) {
+                throw new ResponseStatusException(
+                        HttpStatusCode.valueOf(404),
+                        "book is Unavailable");
+            }
         }
-        Student student = studentService.getStudentDetailsById(requestDTO.getStudent_id());
 
-        List<Book> books = requestDTO.getBook_id_List().stream().map((x) -> {
-            Book book = bookService.getBook(x);
-            return book;
-        }).collect(Collectors.toList());
-
-        // List<Book> book = new ArrayList<>();
-        // for(int i=0 ; i< requestDTO.getBook_id_List().size(); i++){
-        // Book boo = bookService.gBook(requestDTO.getBook_id_List().get(i));
-        // book.add(boo);
-        // }
         List<Admin> admins = adminService.getAllAdmins();
         int smallest = admins.get(0).getRequest().size();
         Admin adminAlloted = admins.get(0);
@@ -57,11 +62,17 @@ public class RequestService {
 
         Request request = Request.builder()
                 .admin(adminAlloted)
-                .book(books)
+                .book(book)
                 .req_status(Request_status.Pending)
                 .student(student)
-                .date(new Date().toString())
+                .req_type(requestDTO.getRequestType())
+                .date(new Date())
                 .build();
+
+        if (requestDTO.getRequestType().equals(RequestType.ISSUE)) {
+            book.setStatus(BookStatus.NOT_AVAILABLE);
+        }
+        bookService.savebook(book);
 
         return requestRepository.save(request);
     }
@@ -75,7 +86,7 @@ public class RequestService {
                 .orElseThrow(() -> new ResponseStatusException(HttpStatusCode.valueOf(404), "Request not present"));
     }
 
-    public Request saveRequest(Request request){
+    public Request saveRequest(Request request) {
         return this.requestRepository.save(request);
     }
 }

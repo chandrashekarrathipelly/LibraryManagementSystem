@@ -15,6 +15,5 @@ import lombok.Setter;
 public class StatusUpdateDto {
     private long request_Id;
     private StausUpdateEnum status;
-    private long admin_id;
 }
 

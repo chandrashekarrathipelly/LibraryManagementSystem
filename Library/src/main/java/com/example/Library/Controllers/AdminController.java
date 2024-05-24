@@ -1,5 +1,6 @@
 package com.example.Library.Controllers;
 
+import java.text.ParseException;
 import java.util.List;
 import java.util.Optional;
 
@@ -21,47 +22,46 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
 
-
-
 @RestController()
 public class AdminController {
     @Autowired
     AdminService adminService;
 
     @PostMapping("/admin")
-    public Admin addAdmin(@RequestBody AdminDTO asAdminDTO){
+    public Admin addAdmin(@RequestBody AdminDTO asAdminDTO) {
         User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-       return adminService.addAdmin(asAdminDTO,user);
+        return adminService.addAdmin(asAdminDTO, user);
     }
 
     @PutMapping("/admin/update/{id}")
-    public Admin upAdmin(@PathVariable long id,@RequestBody AdminDTO adminDTO ){
-        return adminService.update(id,adminDTO);
+    public Admin upAdmin(@PathVariable long id, @RequestBody AdminDTO adminDTO) {
+        return adminService.update(id, adminDTO);
     }
 
     @GetMapping("/admin/{id}")
-    public Optional<Admin>  getMethodName(@RequestParam long id) {
+    public Optional<Admin> getMethodName(@RequestParam long id) {
         return adminService.getAdminDetailsById(id);
     }
 
     @DeleteMapping("/admin/{id}")
-    public String admin(@PathVariable long id){
+    public String admin(@PathVariable long id) {
         return adminService.delted(id);
     }
 
     @GetMapping("/admins")
-    public List<Admin> getAllAdmins(){
-       return adminService.getAllAdmins();
+    public List<Admin> getAllAdmins() {
+        return adminService.getAllAdmins();
     }
 
-    @PostMapping("/admin/request")
-    public Request updateRequest(@RequestBody StatusUpdateDto statusUpdateDto){
-        return this.adminService.statusUpdate(statusUpdateDto);
+    @PostMapping("/admin/request-update")
+    public Request updateRequest(@RequestBody StatusUpdateDto statusUpdateDto) throws ParseException {
+
+        return this.adminService.requestResponseFromAdmin(statusUpdateDto, null);
     }
 
     @GetMapping("/admin/requests/{id}")
     public List<Request> getRequests(@PathVariable long id) {
         return adminService.getRequests(id);
     }
-    
+
 }

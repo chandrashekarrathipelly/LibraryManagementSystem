@@ -59,6 +59,7 @@ public class StudentService {
     studentrepository.deleteById(id);
     return "Student Deleted Successfully";
   }
+  
   public List<Request> getPendingRequestByStudentId(long id){
    Student student = studentrepository.findById(id).orElseThrow(()-> new ResponseStatusException(
            HttpStatusCode.valueOf(404),"Student with id"+id+"not found"));
@@ -73,4 +74,20 @@ public class StudentService {
     }
     return  pendingStudentRequestList;
   }
+
+  public List<Request> getAcceptedRequestByStudentId(long id){
+    Student student = studentrepository.findById(id).orElseThrow(()-> new ResponseStatusException(
+            HttpStatusCode.valueOf(404),"Student with id"+id+"not found"));
+ 
+    List<Request> studentRequestList = student.getRequest();
+     ArrayList<Request> pendingStudentRequestList = new ArrayList<>();
+ 
+     for(Request request: studentRequestList){
+       if (request.getReq_status().equals(Request_status.Accepted)){
+         pendingStudentRequestList.add(request);
+       }
+     }
+     return  pendingStudentRequestList;
+   }
+
 }

@@ -26,7 +26,7 @@ public class StudentController {
     }
 
     @GetMapping("/{id}")
-    public Student  getMethodName(@PathVariable long id) {
+    public Student  getStudentByID(@PathVariable long id) {
         return studentService.getStudentDetailsById(id);
     }
 
@@ -35,13 +35,10 @@ public class StudentController {
         return studentService.deletedStudentUsingId(id);
     }
 
-    @PutMapping("/update/{id}")
-    public Student putMethodName(@PathVariable long id, @RequestBody StudentDTO studentDTO) {
-        studentService.updateStudent(studentDTO,id);
-        
+    @PatchMapping("/update")
+    public Student putStudent(@RequestBody StudentDTO studentDTO) {
+        User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        studentService.updateStudent(studentDTO,user.getStudent().getStudent_id());
         return null;
     }
-
-    
-    
 }

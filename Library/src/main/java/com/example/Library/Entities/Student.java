@@ -24,13 +24,17 @@ public class Student {
     String branch;
     String contact;
     StudentStatus status;
+    double fine;
+
+    @OneToMany(mappedBy = "student")
+    List<Fine> listOfFines;
 
     @OneToOne
     @JoinColumn(referencedColumnName = "id", name = "user_id")
-    @JsonIgnoreProperties({"password", "student", "authorities","admin"})
+    @JsonIgnoreProperties({ "password", "student", "authorities", "admin" })
     User user;
 
-
     @OneToMany(mappedBy = "student")
+    @JsonIgnoreProperties({"student","admin"})
     List<Request> request;
 }
